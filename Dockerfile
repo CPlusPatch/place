@@ -16,6 +16,7 @@ WORKDIR /app
 COPY package.json bun.lockb* ./
 # Copy package patches during install
 COPY patches/ patches/
+COPY cplace-fe/package.json cplace-fe/bun.lockb* cplace-fe/
 
 RUN bun install --frozen-lockfile
 
