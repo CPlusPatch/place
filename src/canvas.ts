@@ -21,6 +21,30 @@ export class Canvas {
     }
 
     /**
+     * Gets the canvas data as a Uint8ClampedArray.
+     * @returns {Uint8ClampedArray} The canvas data.
+     * @example
+     * const canvas = new Canvas(config);
+     * const canvasData = canvas.getCanvas();
+     * console.log(canvasData);
+     */
+    public getCanvas(): Uint8ClampedArray {
+        return this.canvas;
+    }
+
+    /**
+     * Sets the canvas data.
+     * @param {Uint8ClampedArray} canvas - The canvas data to set.
+     * @example
+     * const canvas = new Canvas(config);
+     * const canvasData = new Uint8ClampedArray(100);
+     * canvas.setCanvas(canvasData);
+     */
+    public setCanvas(canvas: Uint8ClampedArray): void {
+        this.canvas = canvas;
+    }
+
+    /**
      * Sets the color of a pixel at the specified coordinates.
      * @param {number} x - The x-coordinate of the pixel.
      * @param {number} y - The y-coordinate of the pixel.

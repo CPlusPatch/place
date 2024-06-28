@@ -64,20 +64,20 @@ export class MessageHandler {
      * @param {string | Buffer} message - The incoming message.
      * @returns {Promise<void>}
      */
-    async handleMessage(
+    handleMessage(
         ws: ServerWebSocket<unknown>,
         message: string | Buffer,
-    ): Promise<void> {
+    ): void {
         try {
             const data = JSON.parse(Buffer.from(message).toString("utf-8"));
             const validatedMessage = MessageSchema.parse(data);
 
             switch (validatedMessage.type) {
                 case "pixelUpdate":
-                    await this.handlePixelUpdate(ws, validatedMessage);
+                    this.handlePixelUpdate(ws, validatedMessage);
                     break;
                 case "getChunk":
-                    await this.handleChunkRequest(ws, validatedMessage);
+                    this.handleChunkRequest(ws, validatedMessage);
                     break;
                 case "getMetadata":
                     this.handleMetadataRequest(ws);
@@ -103,10 +103,10 @@ export class MessageHandler {
      * @returns {Promise<void>}
      * @private
      */
-    private async handlePixelUpdate(
+    private handlePixelUpdate(
         ws: ServerWebSocket<unknown>,
         update: PixelUpdate,
-    ): Promise<void> {
+    ): void {
         const client = this.clientManager.getClient(ws);
         if (!client) {
             return;
@@ -131,7 +131,7 @@ export class MessageHandler {
         const chunkY = Math.floor(
             update.y / this.config.config.canvas.chunks.size,
         );
-        await this.storageManager.writeChunkToDisk(
+        this.storageManager.markChunkAsModified(
             chunkX,
             chunkY,
             this.canvas.getChunk(chunkX, chunkY),
@@ -169,22 +169,12 @@ export class MessageHandler {
      * @returns {Promise<void>}
      * @private
      */
-    private async handleChunkRequest(
+    private handleChunkRequest(
         ws: ServerWebSocket<unknown>,
         request: ChunkRequest,
-    ): Promise<void> {
-        let chunkData = await this.storageManager.readChunkFromDisk(
-            request.x,
-            request.y,
-        );
-        if (!chunkData) {
-            chunkData = this.canvas.getChunk(request.x, request.y);
-            await this.storageManager.writeChunkToDisk(
-                request.x,
-                request.y,
-                chunkData,
-            );
-        }
+    ): void {
+        const chunkData = this.canvas.getChunk(request.x, request.y);
+
         ws.send(
             JSON.stringify({
                 type: "chunk",

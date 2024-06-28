@@ -83,6 +83,6 @@
         "ignore": ["node_modules", "dist"]
     },
     "javascript": {
-        "globals": ["Bun"]
+        "globals": ["Bun", "Timer"]
     }
 }

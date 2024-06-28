@@ -19,6 +19,7 @@ import {
 } from "@logtape/logtape";
 import chalk from "chalk";
 import stripAnsi from "strip-ansi";
+import type { IConfig } from "./config";
 
 // HACK: This is a workaround for the lack of type exports in the Logtape package.
 type RotatingFileSinkDriver<T> =
@@ -175,7 +176,7 @@ export const nodeDriver: RotatingFileSinkDriver<number> = {
     renameSync: renameSync,
 };
 
-export const configureLoggers = (silent = false) =>
+export const configureLoggers = (silent = false, config?: IConfig) =>
     configure({
         reset: true,
         sinks: {
@@ -192,7 +193,7 @@ export const configureLoggers = (silent = false) =>
         filters: {
             configFilter: silent
                 ? getLevelFilter(null)
-                : getLevelFilter("debug"),
+                : getLevelFilter(config?.logging.level ?? "debug"),
         },
         loggers: [
             {

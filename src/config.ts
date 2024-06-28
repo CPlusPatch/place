@@ -9,17 +9,51 @@ const ConfigSchema = z.object({
             width: z.number().int(),
             height: z.number().int(),
         }),
-        chunks: z.object({
-            size: z.number().int(),
+        chunks: z
+            .object({
+                size: z.number().int().default(16),
+            })
+            .default({
+                size: 16,
+            }),
+    }),
+    ratelimits: z
+        .object({
+            cooldown: z
+                .number()
+                .int()
+                .default(5 * 60 * 1000),
+        })
+        .default({
+            cooldown: 5 * 60 * 1000,
         }),
-    }),
-    ratelimits: z.object({
-        cooldown: z.number().int(),
-    }),
-    websockets: z.object({
-        port: z.number().int().min(1).max(65535),
-        host: z.string(),
-    }),
+    websockets: z
+        .object({
+            port: z.number().int().min(1).max(65535).default(3000),
+            host: z.string().default("0.0.0.0"),
+        })
+        .default({
+            port: 3000,
+            host: "0.0.0.0",
+        }),
+    disk: z
+        .object({
+            interval: z.number().int().min(1).default(5000),
+            path: z.string().default("data/map.bin"),
+        })
+        .default({
+            interval: 5000,
+            path: "data/map.bin",
+        }),
+    logging: z
+        .object({
+            level: z
+                .enum(["debug", "info", "warning", "error", "fatal"])
+                .default("info"),
+        })
+        .default({
+            level: "info",
+        }),
 });
 
 export type IConfig = z.infer<typeof ConfigSchema>;

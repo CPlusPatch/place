@@ -28,7 +28,7 @@ export class ClientManager {
     addClient(ws: ServerWebSocket<unknown>): void {
         const clientId = this.generateId();
         this.clients.set(ws, { id: clientId, lastUpdate: 0 });
-        logger.info`Client connected: ${chalk.green(clientId)}`;
+        logger.debug`Client connected: ${chalk.green(clientId)}`;
     }
 
     /**
@@ -38,7 +38,7 @@ export class ClientManager {
     removeClient(ws: ServerWebSocket<unknown>): void {
         const client = this.clients.get(ws);
         if (client) {
-            logger.info`Client disconnected: ${chalk.red(client.id)}`;
+            logger.debug`Client disconnected: ${chalk.red(client.id)}`;
             this.clients.delete(ws);
         }
     }

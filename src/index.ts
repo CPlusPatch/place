@@ -28,7 +28,11 @@ class PlaceServer {
         );
     }
 
-    start(): void {
+    public async start(): Promise<void> {
+        const map = await this.storageManager.readFromDisk();
+
+        this.canvas.setCanvas(map);
+
         Bun.serve({
             port: this.config.config.websockets.port,
             hostname: this.config.config.websockets.host,
@@ -59,6 +63,10 @@ class PlaceServer {
         logger.info`WebSocket server is running on ${chalk.blue(
             `ws://${this.config.config.websockets.host}:${this.config.config.websockets.port}`,
         )}`;
+
+        setInterval(() => {
+            this.storageManager.writeToDisk(this.canvas.getCanvas());
+        }, this.config.config.disk.interval);
     }
 }
 
@@ -66,5 +74,6 @@ class PlaceServer {
 await configureLoggers();
 
 const config = await Config.load();
+await configureLoggers(false, config.config);
 const server = new PlaceServer(config);
-server.start();
+await server.start();

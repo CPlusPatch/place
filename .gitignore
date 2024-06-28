@@ -133,3 +133,4 @@ dist
 bunfig.toml
 *.bak
 config/config.toml
+data/

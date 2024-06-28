@@ -11,3 +11,12 @@ cooldown = 300_000 # 5 minutes in milliseconds
 [websockets]
 port = 3000
 host = "localhost"
+
+[disk]
+# Interval in milliseconds between each save
+interval = 4000
+# Path to the save file
+path = "data/map.bin"
+
+[logging]
+level = "info"
