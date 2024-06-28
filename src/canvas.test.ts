@@ -1,7 +1,7 @@
 // canvas.test.ts
 import { beforeEach, describe, expect, test } from "bun:test";
 import { Canvas, type Rgb } from "./canvas";
-import { Config, type IConfig } from "./config";
+import { Config } from "./config";
 
 describe("Canvas", () => {
     const config = new Config({
@@ -21,7 +21,14 @@ describe("Canvas", () => {
             host: "localhost",
             port: 8080,
         },
-    } as unknown as IConfig);
+        disk: {
+            interval: 5000,
+            path: "data/map.bin",
+        },
+        logging: {
+            level: "info",
+        },
+    });
     let canvas: Canvas;
 
     beforeEach(() => {

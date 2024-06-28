@@ -20,7 +20,14 @@ describe("Config", () => {
                 host: "localhost",
                 port: 8080,
             },
-        } as unknown as IConfig;
+            disk: {
+                interval: 5000,
+                path: "data/map.bin",
+            },
+            logging: {
+                level: "info",
+            },
+        };
         const config = new Config(customConfig);
         expect(config.config).toEqual(customConfig);
     });

@@ -1,7 +1,7 @@
 // storage-manager.test.ts
 import { beforeEach, describe, expect, jest, test } from "bun:test";
 import type { Canvas } from "./canvas";
-import { Config, type IConfig } from "./config";
+import { Config } from "./config";
 import { StorageManager } from "./storage-manager";
 
 describe("StorageManager", () => {
@@ -26,7 +26,14 @@ describe("StorageManager", () => {
                 host: "localhost",
                 port: 8080,
             },
-        } as unknown as IConfig);
+            disk: {
+                interval: 5000,
+                path: "data/map.bin",
+            },
+            logging: {
+                level: "info",
+            },
+        });
         mockCanvas = {
             getChunk: jest.fn().mockReturnValue(new Uint8ClampedArray(100)),
         } as unknown as Canvas;

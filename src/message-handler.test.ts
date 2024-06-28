@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, jest, spyOn, test } from "bun:test";
 import type { ServerWebSocket } from "bun";
 import type { Canvas } from "./canvas";
 import type { ClientManager } from "./client-manager";
-import { Config, type IConfig } from "./config";
+import { Config } from "./config";
 import { logger } from "./logging";
 import { MessageHandler } from "./message-handler";
 import type { StorageManager } from "./storage-manager";
@@ -34,7 +34,14 @@ describe("MessageHandler", () => {
                 host: "localhost",
                 port: 8080,
             },
-        } as unknown as IConfig);
+            disk: {
+                interval: 5000,
+                path: "data/map.bin",
+            },
+            logging: {
+                level: "info",
+            },
+        });
         mockCanvas = {
             setPixel: jest.fn(),
             getChunk: jest.fn().mockReturnValue(new Uint8ClampedArray(100)),
