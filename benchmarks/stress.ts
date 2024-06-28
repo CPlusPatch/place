@@ -272,7 +272,7 @@ function parseArguments(): Config {
 
 // Default configuration
 const defaultConfig: Config = {
-    serverUrl: "wss://cplace.fly.dev",
+    serverUrl: "wss://api.place.cpluspatch.com",
     totalClients: 10,
     connectionsPerSecond: 10,
     simulationDuration: 20,

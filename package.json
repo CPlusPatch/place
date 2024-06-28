@@ -39,6 +39,7 @@
     "description": "r/Place clone",
     "categories": ["Other"],
     "type": "module",
+    "workspaces": ["cplace-fe"],
     "engines": {
         "bun": ">=1.1.17"
     },
@@ -58,7 +59,12 @@
         "@biomejs/biome": "^1.8.3",
         "@types/bun": "^1.1.6"
     },
-    "trustedDependencies": ["@biomejs/biome"],
+    "trustedDependencies": [
+        "@biomejs/biome",
+        "@sveltejs/kit",
+        "esbuild",
+        "svelte-preprocess"
+    ],
     "patchedDependencies": {
         "@jsr/logtape__logtape@0.4.0": "patches/@jsr%2Flogtape__logtape@0.4.0.patch"
     }

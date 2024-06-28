@@ -2,7 +2,7 @@
     "$schema": "https://biomejs.dev/schemas/1.8.1/schema.json",
     "organizeImports": {
         "enabled": true,
-        "ignore": ["node_modules", "dist"]
+        "ignore": ["node_modules", "dist", ".svelte-kit"]
     },
     "linter": {
         "enabled": true,
@@ -74,15 +74,27 @@
                 "useThrowNewError": "warn"
             }
         },
-        "ignore": ["node_modules", "dist"]
+        "ignore": ["node_modules", "dist", ".svelte-kit"]
     },
     "formatter": {
         "enabled": true,
         "indentStyle": "space",
         "indentWidth": 4,
-        "ignore": ["node_modules", "dist"]
+        "ignore": ["node_modules", "dist", ".svelte-kit"]
     },
     "javascript": {
         "globals": ["Bun", "Timer"]
-    }
+    },
+    "overrides": [
+        {
+            "include": ["./**/*.svelte"],
+            "linter": {
+                "rules": {
+                    "correctness": {
+                        "noUnusedVariables": "off"
+                    }
+                }
+            }
+        }
+    ]
 }
