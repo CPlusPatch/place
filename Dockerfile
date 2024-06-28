@@ -1,6 +1,6 @@
-FROM oven/bun:1.1.17-alpine as base
+FROM oven/bun:1.1.17-alpine AS base
 
-FROM base as builder
+FROM base AS builder
 
 LABEL maintainer="Jesse Wierzbinski <contact@cpluspatch.com>"
 LABEL version="0.1.0"
@@ -25,7 +25,7 @@ COPY . .
 # Build the application
 RUN bun run build
 
-FROM base as production
+FROM base AS production
 
 COPY --from=builder /app/dist /app/dist
 
