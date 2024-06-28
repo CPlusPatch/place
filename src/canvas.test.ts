@@ -1,5 +1,5 @@
 // canvas.test.ts
-import { expect, test, describe, beforeEach } from "bun:test";
+import { beforeEach, describe, expect, test } from "bun:test";
 import { Canvas, type Rgb } from "./canvas";
 import { Config } from "./config";
 

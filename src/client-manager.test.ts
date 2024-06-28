@@ -1,7 +1,7 @@
 // client-manager.test.ts
-import { expect, test, describe, jest, beforeEach } from "bun:test";
-import { ClientManager } from "./client-manager";
+import { beforeEach, describe, expect, jest, test } from "bun:test";
 import type { ServerWebSocket } from "bun";
+import { ClientManager } from "./client-manager";
 
 describe("ClientManager", () => {
     let clientManager: ClientManager;

@@ -1,12 +1,12 @@
 // message-handler.test.ts
-import { expect, test, describe, jest, beforeEach, spyOn } from "bun:test";
-import { MessageHandler } from "./message-handler";
-import { Config } from "./config";
+import { beforeEach, describe, expect, jest, spyOn, test } from "bun:test";
+import type { ServerWebSocket } from "bun";
 import type { Canvas } from "./canvas";
 import type { ClientManager } from "./client-manager";
-import type { StorageManager } from "./storage-manager";
-import type { ServerWebSocket } from "bun";
+import { Config } from "./config";
 import { logger } from "./logging";
+import { MessageHandler } from "./message-handler";
+import type { StorageManager } from "./storage-manager";
 
 describe("MessageHandler", () => {
     let messageHandler: MessageHandler;

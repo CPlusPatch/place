@@ -1,6 +1,6 @@
 import type { ServerWebSocket } from "bun";
-import { logger } from "./logging";
 import chalk from "chalk";
+import { logger } from "./logging";
 
 interface ClientMetadata {
     id: string;

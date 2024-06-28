@@ -1,12 +1,12 @@
 import type { ServerWebSocket } from "bun";
+import chalk from "chalk";
 import { z } from "zod";
+import { fromZodError } from "zod-validation-error";
 import type { Canvas } from "./canvas";
 import type { ClientManager } from "./client-manager";
 import type { Config } from "./config";
-import type { StorageManager } from "./storage-manager";
 import { logger } from "./logging";
-import chalk from "chalk";
-import { fromZodError } from "zod-validation-error";
+import type { StorageManager } from "./storage-manager";
 
 // Define Zod schemas
 const RgbSchema = z.tuple([

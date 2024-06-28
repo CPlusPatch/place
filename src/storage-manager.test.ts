@@ -1,8 +1,8 @@
 // storage-manager.test.ts
-import { expect, test, describe, jest, beforeEach } from "bun:test";
-import { StorageManager } from "./storage-manager";
-import { Config } from "./config";
+import { beforeEach, describe, expect, jest, test } from "bun:test";
 import type { Canvas } from "./canvas";
+import { Config } from "./config";
+import { StorageManager } from "./storage-manager";
 
 describe("StorageManager", () => {
     let storageManager: StorageManager;
