@@ -1,0 +1,13 @@
+[canvas.size]
+width = 800
+height = 600
+
+[canvas.chunks]
+size = 16
+
+[ratelimits]
+cooldown = 300_000 # 5 minutes in milliseconds
+
+[websockets]
+port = 3000
+host = "localhost"

@@ -29,7 +29,7 @@ Please upload logs onto a service like [Pastebin](https://pastebin.com/) or [Has
 
 ## Environment
 
-- OS: [e.g.  Fedora 39]
+- OS: [e.g. Fedora 39]
 - Bun version
 - Commit ID
 

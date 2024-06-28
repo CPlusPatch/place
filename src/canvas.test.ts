@@ -5,9 +5,22 @@ import { Config } from "./config";
 
 describe("Canvas", () => {
     const config = new Config({
-        canvasSizeX: 10,
-        canvasSizeY: 10,
-        chunkSize: 5,
+        canvas: {
+            chunks: {
+                size: 7,
+            },
+            size: {
+                height: 10,
+                width: 10,
+            },
+        },
+        ratelimits: {
+            cooldown: 10 * 60 * 1000,
+        },
+        websockets: {
+            host: "localhost",
+            port: 8080,
+        },
     });
     let canvas: Canvas;
 
@@ -28,10 +41,19 @@ describe("Canvas", () => {
         canvas.setPixel(4, 4, color2);
 
         const chunk = canvas.getChunk(0, 0);
-        expect(chunk.length).toBe(5 * 5 * 3);
+        expect(chunk.length).toBe(7 * 7 * 3);
         expect(chunk.slice(0, 3)).toEqual(new Uint8ClampedArray(color1));
-        expect(chunk.slice((4 * 5 + 4) * 3, (4 * 5 + 4) * 3 + 3)).toEqual(
+        // 7 is the chunk size, 4 is the x and y position of the second pixel
+        expect(chunk.slice((4 * 7 + 4) * 3, (4 * 7 + 4) * 3 + 3)).toEqual(
             new Uint8ClampedArray(color2),
         );
+    });
+
+    test("should handle chunks not fitting in the canvas", () => {
+        const color: Rgb = [255, 0, 0];
+        canvas.setPixel(0, 0, color);
+        const chunk = canvas.getChunk(1, 1);
+        expect(chunk.length).toBe(7 * 7 * 3);
+        expect(chunk.slice(0, 3)).toEqual(new Uint8ClampedArray([0, 0, 0]));
     });
 });

@@ -1,21 +1,22 @@
 import chalk from "chalk";
 import { Canvas } from "./canvas";
 import { ClientManager } from "./client-manager";
-// server.ts
 import { Config } from "./config";
 import { configureLoggers, logger } from "./logging";
 import { MessageHandler } from "./message-handler";
 import { StorageManager } from "./storage-manager";
 
+process.on("SIGINT", () => {
+    process.exit();
+});
+
 class PlaceServer {
-    private config: Config;
     private canvas: Canvas;
     private clientManager: ClientManager;
     private storageManager: StorageManager;
     private messageHandler: MessageHandler;
 
-    constructor(config: Partial<Config> = {}) {
-        this.config = new Config(config);
+    constructor(private config: Config) {
         this.canvas = new Canvas(this.config);
         this.clientManager = new ClientManager();
         this.storageManager = new StorageManager(this.config, this.canvas);
@@ -29,11 +30,11 @@ class PlaceServer {
 
     start(): void {
         Bun.serve({
-            port: this.config.port,
-
+            port: this.config.config.websockets.port,
+            hostname: this.config.config.websockets.host,
             fetch: (req, server) => {
                 if (server.upgrade(req)) {
-                    return; // Do not return a Response
+                    return;
                 }
                 return new Response("r/place clone server is running", {
                     status: 200,
@@ -56,7 +57,7 @@ class PlaceServer {
         });
 
         logger.info`WebSocket server is running on ${chalk.blue(
-            `ws://localhost:${this.config.port}`,
+            `ws://${this.config.config.websockets.host}:${this.config.config.websockets.port}`,
         )}`;
     }
 }
@@ -64,5 +65,6 @@ class PlaceServer {
 // Start the server
 await configureLoggers();
 
-const server = new PlaceServer();
+const config = await Config.load();
+const server = new PlaceServer(config);
 server.start();

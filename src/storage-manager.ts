@@ -4,13 +4,10 @@ import type { Config } from "./config";
 import { logger } from "./logging";
 
 export class StorageManager {
-    private config: Config;
-    private canvas: Canvas;
-
-    constructor(config: Config, canvas: Canvas) {
-        this.config = config;
-        this.canvas = canvas;
-    }
+    constructor(
+        private config: Config,
+        private canvas: Canvas,
+    ) {}
 
     // biome-ignore lint/suspicious/useAwait: <explanation>
     async readChunkFromDisk(

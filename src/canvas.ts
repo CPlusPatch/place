@@ -1,28 +1,46 @@
-// Canvas.ts
 import type { Config } from "./config";
 
 export type Rgb = [number, number, number];
 
+/**
+ * The Canvas class represents a 2D grid of pixels, each represented by an RGB color.
+ */
 export class Canvas {
     private canvas: Uint8ClampedArray;
-    private config: Config;
 
-    constructor(config: Config) {
-        this.config = config;
+    /**
+     * Constructs a new Canvas instance.
+     * @param {Config} config - The configuration object for the canvas.
+     */
+    constructor(private config: Config) {
         this.canvas = new Uint8ClampedArray(
-            config.canvasSizeX * config.canvasSizeY * 3,
+            config.config.canvas.size.width *
+                config.config.canvas.size.height *
+                3,
         );
     }
 
+    /**
+     * Sets the color of a pixel at the specified coordinates.
+     * @param {number} x - The x-coordinate of the pixel.
+     * @param {number} y - The y-coordinate of the pixel.
+     * @param {Rgb} color - The RGB color to set the pixel to.
+     */
     public setPixel(x: number, y: number, color: Rgb): void {
-        const index = (y * this.config.canvasSizeX + x) * 3;
+        const index = (y * this.config.config.canvas.size.width + x) * 3;
         this.canvas[index] = color[0];
         this.canvas[index + 1] = color[1];
         this.canvas[index + 2] = color[2];
     }
 
+    /**
+     * Gets the color of a pixel at the specified coordinates.
+     * @param {number} x - The x-coordinate of the pixel.
+     * @param {number} y - The y-coordinate of the pixel.
+     * @returns {Rgb} The RGB color of the pixel.
+     */
     public getPixel(x: number, y: number): Rgb {
-        const index = (y * this.config.canvasSizeX + x) * 3;
+        const index = (y * this.config.config.canvas.size.width + x) * 3;
         return [
             this.canvas[index],
             this.canvas[index + 1],
@@ -30,21 +48,25 @@ export class Canvas {
         ];
     }
 
+    /**
+     * Gets a chunk of the canvas as a new Uint8ClampedArray.
+     * @param {number} x - The x-coordinate of the chunk's top-left corner.
+     * @param {number} y - The y-coordinate of the chunk's top-left corner.
+     * @returns {Uint8ClampedArray} The chunk data.
+     */
     public getChunk(x: number, y: number): Uint8ClampedArray {
-        const chunkData = new Uint8ClampedArray(
-            this.config.chunkSize * this.config.chunkSize * 3,
-        );
-        for (let i = 0; i < this.config.chunkSize; i++) {
-            for (let j = 0; j < this.config.chunkSize; j++) {
-                const canvasX = x * this.config.chunkSize + i;
-                const canvasY = y * this.config.chunkSize + j;
-                if (
-                    canvasX < this.config.canvasSizeX &&
-                    canvasY < this.config.canvasSizeY
-                ) {
-                    const canvasIndex =
-                        (canvasY * this.config.canvasSizeX + canvasX) * 3;
-                    const chunkIndex = (j * this.config.chunkSize + i) * 3;
+        const chunkSize = this.config.config.canvas.chunks.size;
+        const canvasWidth = this.config.config.canvas.size.width;
+        const canvasHeight = this.config.config.canvas.size.height;
+        const chunkData = new Uint8ClampedArray(chunkSize * chunkSize * 3);
+
+        for (let i = 0; i < chunkSize; i++) {
+            for (let j = 0; j < chunkSize; j++) {
+                const canvasX = x * chunkSize + i;
+                const canvasY = y * chunkSize + j;
+                if (canvasX < canvasWidth && canvasY < canvasHeight) {
+                    const canvasIndex = (canvasY * canvasWidth + canvasX) * 3;
+                    const chunkIndex = (j * chunkSize + i) * 3;
                     chunkData[chunkIndex] = this.canvas[canvasIndex];
                     chunkData[chunkIndex + 1] = this.canvas[canvasIndex + 1];
                     chunkData[chunkIndex + 2] = this.canvas[canvasIndex + 2];

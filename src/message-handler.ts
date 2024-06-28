@@ -8,7 +8,6 @@ import type { Config } from "./config";
 import { logger } from "./logging";
 import type { StorageManager } from "./storage-manager";
 
-// Define Zod schemas
 const RgbSchema = z.tuple([
     z.number().int().min(0).max(255),
     z.number().int().min(0).max(255),
@@ -33,24 +32,30 @@ const MessageSchema = z.union([PixelUpdateSchema, ChunkRequestSchema]);
 type PixelUpdate = z.infer<typeof PixelUpdateSchema>;
 type ChunkRequest = z.infer<typeof ChunkRequestSchema>;
 
+/**
+ * The MessageHandler class handles incoming messages from clients.
+ */
 export class MessageHandler {
-    private config: Config;
-    private canvas: Canvas;
-    private clientManager: ClientManager;
-    private storageManager: StorageManager;
-
+    /**
+     * Constructs a new MessageHandler instance.
+     * @param {Config} config - The configuration object for the server.
+     * @param {Canvas} canvas - The canvas object to manipulate.
+     * @param {ClientManager} clientManager - The client manager to manage clients.
+     * @param {StorageManager} storageManager - The storage manager to manage storage.
+     */
     constructor(
-        config: Config,
-        canvas: Canvas,
-        clientManager: ClientManager,
-        storageManager: StorageManager,
-    ) {
-        this.config = config;
-        this.canvas = canvas;
-        this.clientManager = clientManager;
-        this.storageManager = storageManager;
-    }
+        private config: Config,
+        private canvas: Canvas,
+        private clientManager: ClientManager,
+        private storageManager: StorageManager,
+    ) {}
 
+    /**
+     * Handles an incoming message from a client.
+     * @param {ServerWebSocket<unknown>} ws - The WebSocket of the client.
+     * @param {string | Buffer} message - The incoming message.
+     * @returns {Promise<void>}
+     */
     async handleMessage(
         ws: ServerWebSocket<unknown>,
         message: string | Buffer,
@@ -80,6 +85,13 @@ export class MessageHandler {
         }
     }
 
+    /**
+     * Handles a pixel update message from a client.
+     * @param {ServerWebSocket<unknown>} ws - The WebSocket of the client.
+     * @param {PixelUpdate} update - The pixel update message.
+     * @returns {Promise<void>}
+     * @private
+     */
     private async handlePixelUpdate(
         ws: ServerWebSocket<unknown>,
         update: PixelUpdate,
@@ -90,7 +102,7 @@ export class MessageHandler {
         }
 
         const now = Date.now();
-        if (now - client.lastUpdate < this.config.cooldownPeriod) {
+        if (now - client.lastUpdate < this.config.config.ratelimits.cooldown) {
             return;
         }
 
@@ -102,8 +114,12 @@ export class MessageHandler {
         this.clientManager.broadcastMessage(updateMessage);
 
         // Write updated chunk to disk
-        const chunkX = Math.floor(update.x / this.config.chunkSize);
-        const chunkY = Math.floor(update.y / this.config.chunkSize);
+        const chunkX = Math.floor(
+            update.x / this.config.config.canvas.chunks.size,
+        );
+        const chunkY = Math.floor(
+            update.y / this.config.config.canvas.chunks.size,
+        );
         await this.storageManager.writeChunkToDisk(
             chunkX,
             chunkY,
@@ -111,6 +127,13 @@ export class MessageHandler {
         );
     }
 
+    /**
+     * Handles a chunk request message from a client.
+     * @param {ServerWebSocket<unknown>} ws - The WebSocket of the client.
+     * @param {ChunkRequest} request - The chunk request message.
+     * @returns {Promise<void>}
+     * @private
+     */
     private async handleChunkRequest(
         ws: ServerWebSocket<unknown>,
         request: ChunkRequest,

@@ -9,7 +9,24 @@ describe("StorageManager", () => {
     let mockCanvas: Canvas;
 
     beforeEach(() => {
-        const config = new Config();
+        const config = new Config({
+            canvas: {
+                size: {
+                    width: 100,
+                    height: 100,
+                },
+                chunks: {
+                    size: 10,
+                },
+            },
+            ratelimits: {
+                cooldown: 10 * 60 * 1000,
+            },
+            websockets: {
+                host: "localhost",
+                port: 8080,
+            },
+        });
         mockCanvas = {
             getChunk: jest.fn().mockReturnValue(new Uint8ClampedArray(100)),
         } as unknown as Canvas;

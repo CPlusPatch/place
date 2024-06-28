@@ -11,9 +11,6 @@
             "correctness": {
                 "noNodejsModules": "off"
             },
-            "complexity": {
-                "noExcessiveCognitiveComplexity": "off"
-            },
             "style": {
                 "noDefaultExport": "off",
                 "noParameterProperties": "off",

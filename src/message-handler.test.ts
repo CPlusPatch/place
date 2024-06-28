@@ -17,7 +17,24 @@ describe("MessageHandler", () => {
     let mockWs: ServerWebSocket<unknown>;
 
     beforeEach(() => {
-        mockConfig = new Config();
+        mockConfig = new Config({
+            canvas: {
+                size: {
+                    width: 100,
+                    height: 100,
+                },
+                chunks: {
+                    size: 10,
+                },
+            },
+            ratelimits: {
+                cooldown: 10 * 60 * 1000,
+            },
+            websockets: {
+                host: "localhost",
+                port: 8080,
+            },
+        });
         mockCanvas = {
             setPixel: jest.fn(),
             getChunk: jest.fn().mockReturnValue(new Uint8ClampedArray(100)),
