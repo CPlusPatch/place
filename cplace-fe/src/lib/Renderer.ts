@@ -1,4 +1,4 @@
-import type { Board } from "./Board";
+import type { Board, Rgb } from "./Board";
 import type { Camera } from "./Camera";
 
 /**
@@ -28,6 +28,7 @@ export class Renderer {
     }
 
     render(): void {
+        this.resetLastRenderedArea();
         const { position, zoom } = this.camera.getState();
         const scaledCellSize = this.cellSize * zoom;
 
@@ -74,6 +75,10 @@ export class Renderer {
         );
     }
 
+    public resetLastRenderedArea(): void {
+        this.lastRenderedArea = null;
+    }
+
     private clear(): void {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -99,16 +104,34 @@ export class Renderer {
 
                 if (r !== 255 || g !== 255 || b !== 255) {
                     // Only draw non-white cells
-                    this.ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-                    this.ctx.fillRect(
+                    this.drawCell(
                         cellX,
                         cellY,
                         scaledCellSize,
                         scaledCellSize,
+                        [r, g, b],
                     );
                 }
             }
         }
+    }
+
+    drawCell(
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+        color: Rgb,
+    ): void {
+        // Paste an image
+        const imageData = this.ctx.createImageData(width, height);
+        for (let i = 0; i < imageData.data.length; i += 4) {
+            imageData.data[i] = color[0];
+            imageData.data[i + 1] = color[1];
+            imageData.data[i + 2] = color[2];
+            imageData.data[i + 3] = 255;
+        }
+        this.ctx.putImageData(imageData, x, y);
     }
 
     updateCell(x: number, y: number): void {
@@ -122,8 +145,11 @@ export class Renderer {
         if (r === 255 && g === 255 && b === 255) {
             this.ctx.clearRect(cellX, cellY, scaledCellSize, scaledCellSize);
         } else {
-            this.ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-            this.ctx.fillRect(cellX, cellY, scaledCellSize, scaledCellSize);
+            this.drawCell(cellX, cellY, scaledCellSize, scaledCellSize, [
+                r,
+                g,
+                b,
+            ]);
         }
     }
 }

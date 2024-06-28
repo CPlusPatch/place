@@ -16,7 +16,13 @@ let canvasEl: HTMLCanvasElement;
 let game: Game;
 
 onMount(() => {
-    game = new Game(canvasEl, CELL_SIZE, "wss://api.place.cpluspatch.com");
+    game = new Game(
+        canvasEl,
+        CELL_SIZE,
+        import.meta.env.DEV
+            ? "ws://localhost:3000"
+            : "wss://api.place.cpluspatch.com",
+    );
     game.start();
     handleResize();
 });

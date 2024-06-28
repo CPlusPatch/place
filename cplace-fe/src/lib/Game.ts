@@ -213,7 +213,7 @@ export class Game {
      * @param event - The wheel event.
      */
     handleScroll(event: WheelEvent): void {
-        const zoomFactor = event.deltaY > 0 ? 0.9 : 1.1;
+        const zoomFactor = event.deltaY > 0 ? 0.5 : 2;
         this.camera?.adjustZoom(zoomFactor);
     }
 
