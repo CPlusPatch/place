@@ -1,0 +1,31 @@
+# fly.toml app configuration file generated for cplace on 2024-06-27T17:28:25-10:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "cplace"
+primary_region = "cdg"
+
+[build]
+image = "ghcr.io/cpluspatch/place:main"
+
+[http_service]
+internal_port = 3000
+force_https = true
+auto_stop_machines = true
+auto_start_machines = true
+min_machines_running = 0
+processes = ["app"]
+
+[[vm]]
+memory = "16gb"
+cpu_kind = "performance"
+cpus = 4
+
+[[mounts]]
+source = "config"
+destination = "/app/config"
+
+[[mounts]]
+source = "data"
+destination = "/app/data"
