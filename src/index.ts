@@ -50,7 +50,8 @@ class PlaceServer {
                 if (server.upgrade(req)) {
                     return;
                 }
-                return new Response("r/place clone server is running", {
+
+                return new Response("The server is running!", {
                     status: 200,
                 });
             },

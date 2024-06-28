@@ -97,6 +97,11 @@ class Client {
             return;
         }
 
+        // Check if ready
+        if (this.ws.readyState !== WebSocket.OPEN) {
+            return;
+        }
+
         if (Math.random() < this.config.updateProbability) {
             this.sendPixelUpdate();
         } else if (Math.random() < this.config.chunkRequestProbability) {
@@ -267,9 +272,9 @@ function parseArguments(): Config {
 
 // Default configuration
 const defaultConfig: Config = {
-    serverUrl: "ws://localhost:3000",
-    totalClients: 10000,
-    connectionsPerSecond: 1000,
+    serverUrl: "wss://cplace.fly.dev",
+    totalClients: 10,
+    connectionsPerSecond: 10,
     simulationDuration: 20,
     canvasWidth: 800,
     canvasHeight: 600,
