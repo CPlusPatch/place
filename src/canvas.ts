@@ -14,14 +14,23 @@ export class Canvas {
         );
     }
 
-    setPixel(x: number, y: number, color: Rgb): void {
+    public setPixel(x: number, y: number, color: Rgb): void {
         const index = (y * this.config.canvasSizeX + x) * 3;
         this.canvas[index] = color[0];
         this.canvas[index + 1] = color[1];
         this.canvas[index + 2] = color[2];
     }
 
-    getChunk(x: number, y: number): Uint8ClampedArray {
+    public getPixel(x: number, y: number): Rgb {
+        const index = (y * this.config.canvasSizeX + x) * 3;
+        return [
+            this.canvas[index],
+            this.canvas[index + 1],
+            this.canvas[index + 2],
+        ];
+    }
+
+    public getChunk(x: number, y: number): Uint8ClampedArray {
         const chunkData = new Uint8ClampedArray(
             this.config.chunkSize * this.config.chunkSize * 3,
         );
