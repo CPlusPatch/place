@@ -1,0 +1,61 @@
+{
+  "name": "@cpluspatch/cplace",
+  "private": true,
+  "displayName": "CPlusPatch's r/Place",
+  "version": "0.0.0",
+  "author": {
+    "name": "Jesse Wierzbinski",
+    "email": "jesse.wierzbinski@cpluspatch.com",
+    "url": "https://cpluspatch.com"
+  },
+  "scripts": {
+    "lint": "bunx @biomejs/biome check .",
+    "dev": "bun run --hot src/index.ts"
+  },
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cpluspatch/cplace.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cpluspatch/cplace/issues"
+  },
+  "license": "AGPL-3.0-or-later",
+  "contributors": [
+    {
+      "name": "Jesse Wierzbinski",
+      "email": "jesse.wierzbinski@cpluspatch.com",
+      "url": "https://cpluspatch.com"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "Jesse Wierzbinski",
+      "email": "jesse.wierzbinski@cpluspatch.com",
+      "url": "https://cpluspatch.com"
+    }
+  ],
+  "description": "r/Place clone",
+  "categories": ["Other"],
+  "type": "module",
+  "engines": {
+    "bun": ">=1.1.17"
+  },
+  "keywords": ["place", "websockets"],
+  "packageManager": "bun@1.1.17",
+  "dependencies": {
+    "@logtape/logtape": "npm:@jsr/logtape__logtape",
+    "chalk": "^5.3.0",
+    "strip-ansi": "^7.1.0",
+    "zod": "^3.23.8",
+    "zod-validation-error": "^3.3.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "@types/bun": "^1.1.6"
+  },
+  "trustedDependencies": ["@biomejs/biome"],
+  "patchedDependencies": {
+    "@jsr/logtape__logtape@0.4.0": "patches/@jsr%2Flogtape__logtape@0.4.0.patch"
+  }
+}

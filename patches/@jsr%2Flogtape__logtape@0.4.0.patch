@@ -1,0 +1,15 @@
+diff --git a/logtape/filesink.deno.js b/logtape/filesink.deno.js
+index 290079fe1193c9e350a0037f99b17a5c89c236f3..bc889b0b55df6ab7efc379b1a07fb7f5c7e57619 100755
+--- a/logtape/filesink.deno.js
++++ b/logtape/filesink.deno.js
+@@ -18,8 +18,8 @@ import { getFileSink as getBaseFileSink, getRotatingFileSink as getBaseRotatingF
+   closeSync (fd) {
+     fd.close();
+   },
+-  statSync: Deno.statSync,
+-  renameSync: Deno.renameSync
++  statSync: {}.statSync,
++  renameSync: {}.renameSync
+ };
+ /**
+  * Get a file sink.
