@@ -131,11 +131,7 @@ export class MessageHandler {
         const chunkY = Math.floor(
             update.y / this.config.config.canvas.chunks.size,
         );
-        this.storageManager.markChunkAsModified(
-            chunkX,
-            chunkY,
-            this.canvas.getChunk(chunkX, chunkY),
-        );
+        this.storageManager.markChunkAsModified(chunkX, chunkY);
     }
 
     /**

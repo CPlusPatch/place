@@ -24,7 +24,7 @@ export class Camera {
         private boardHeight: number,
         private cellSize: number,
     ) {
-        this.centerCamera();
+        this.centerCamera(false);
     }
 
     setCanvasSize(width: number, height: number): void {
@@ -35,7 +35,7 @@ export class Camera {
     /**
      * Centers the camera on the board.
      */
-    centerCamera(): void {
+    centerCamera(animate = true): void {
         this.targetPosition = {
             x:
                 (this.canvasWidth -
@@ -46,6 +46,10 @@ export class Camera {
                     this.boardHeight * this.cellSize * this.zoom) /
                 2,
         };
+
+        if (!animate) {
+            this.actualPosition = { ...this.targetPosition };
+        }
     }
 
     /**
@@ -74,6 +78,13 @@ export class Camera {
      * @param factor - The zoom factor to apply.
      */
     adjustZoom(factor: number): void {
+        if (this.zoom * factor < 0.2) {
+            return;
+        }
+        if (this.zoom * factor > 3) {
+            return;
+        }
+
         // Calculate the center of the canvas
         const centerX = this.canvasWidth / 2;
         const centerY = this.canvasHeight / 2;

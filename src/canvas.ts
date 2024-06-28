@@ -23,7 +23,7 @@ export class Canvas {
         width: number,
         height: number,
     ): Uint8ClampedArray {
-        return new Uint8ClampedArray(width * height * 3);
+        return new Uint8ClampedArray(width * height * 3).fill(255);
     }
 
     /**
