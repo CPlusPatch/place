@@ -22,10 +22,6 @@ memory = "16gb"
 cpu_kind = "performance"
 cpus = 4
 
-[[mounts]]
-source = "config"
-destination = "/app/config"
-
-[[mounts]]
+[mounts]
 source = "data"
-destination = "/app/data"
+destination = "/app/config"

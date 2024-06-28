@@ -10,6 +10,16 @@ process.on("SIGINT", () => {
     process.exit();
 });
 
+process.on("uncaughtException", (err) => {
+    logger.fatal`Uncaught exception: ${err}`;
+    console.error(err);
+    logger.fatal`Press Ctrl+C to exit`;
+
+    // Hang until Ctrl+C is pressed
+    Bun.sleepSync(Number.POSITIVE_INFINITY);
+    process.exit(1);
+});
+
 class PlaceServer {
     private canvas: Canvas;
     private clientManager: ClientManager;
