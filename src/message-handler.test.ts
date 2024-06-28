@@ -92,6 +92,30 @@ describe("MessageHandler", () => {
         expect(mockWs.send).toHaveBeenCalled();
     });
 
+    test("should handle valid metadata request", async () => {
+        const message = JSON.stringify({
+            type: "getMetadata",
+        });
+
+        await messageHandler.handleMessage(mockWs, message);
+
+        expect(mockWs.send).toHaveBeenCalledWith(
+            JSON.stringify({
+                type: "metadata",
+                canvas: {
+                    width: 100,
+                    height: 100,
+                },
+                chunks: {
+                    size: 10,
+                },
+                ratelimits: {
+                    cooldown: 10 * 60 * 1000,
+                },
+            }),
+        );
+    });
+
     test("should reject invalid message", async () => {
         const consoleWarnSpy = spyOn(logger, "warn").mockImplementation(() => {
             // ...

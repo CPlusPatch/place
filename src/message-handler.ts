@@ -27,7 +27,15 @@ const ChunkRequestSchema = z.object({
     y: z.number().int(),
 });
 
-const MessageSchema = z.union([PixelUpdateSchema, ChunkRequestSchema]);
+const MetadataRequestSchema = z.object({
+    type: z.literal("getMetadata"),
+});
+
+const MessageSchema = z.union([
+    PixelUpdateSchema,
+    ChunkRequestSchema,
+    MetadataRequestSchema,
+]);
 
 type PixelUpdate = z.infer<typeof PixelUpdateSchema>;
 type ChunkRequest = z.infer<typeof ChunkRequestSchema>;
@@ -70,6 +78,9 @@ export class MessageHandler {
                     break;
                 case "getChunk":
                     await this.handleChunkRequest(ws, validatedMessage);
+                    break;
+                case "getMetadata":
+                    this.handleMetadataRequest(ws);
                     break;
             }
         } catch (error) {
@@ -124,6 +135,30 @@ export class MessageHandler {
             chunkX,
             chunkY,
             this.canvas.getChunk(chunkX, chunkY),
+        );
+    }
+
+    /**
+     * Handles a metadata request message from a client.
+     * @param {ServerWebSocket<unknown>} ws - The WebSocket of the client.
+     * @returns {void}
+     * @private
+     */
+    private handleMetadataRequest(ws: ServerWebSocket<unknown>): void {
+        ws.send(
+            JSON.stringify({
+                type: "metadata",
+                canvas: {
+                    width: this.config.config.canvas.size.width,
+                    height: this.config.config.canvas.size.height,
+                },
+                chunks: {
+                    size: this.config.config.canvas.chunks.size,
+                },
+                ratelimits: {
+                    cooldown: this.config.config.ratelimits.cooldown,
+                },
+            }),
         );
     }
 
