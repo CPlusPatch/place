@@ -15,7 +15,7 @@ const config = {
             out: "dist",
             precompress: {
                 brotli: true,
-            }
+            },
         }),
     },
 };
