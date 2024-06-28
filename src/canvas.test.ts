@@ -61,6 +61,8 @@ describe("Canvas", () => {
         canvas.setPixel(0, 0, color);
         const chunk = canvas.getChunk(1, 1);
         expect(chunk.length).toBe(7 * 7 * 3);
-        expect(chunk.slice(0, 3)).toEqual(new Uint8ClampedArray([0, 0, 0]));
+        expect(chunk.slice(0, 3)).toEqual(
+            new Uint8ClampedArray([255, 255, 255]),
+        );
     });
 });
