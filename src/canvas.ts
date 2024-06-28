@@ -13,11 +13,17 @@ export class Canvas {
      * @param {Config} config - The configuration object for the canvas.
      */
     constructor(private config: Config) {
-        this.canvas = new Uint8ClampedArray(
-            config.config.canvas.size.width *
-                config.config.canvas.size.height *
-                3,
+        this.canvas = Canvas.createEmptyCanvas(
+            config.config.canvas.size.width,
+            config.config.canvas.size.height,
         );
+    }
+
+    public static createEmptyCanvas(
+        width: number,
+        height: number,
+    ): Uint8ClampedArray {
+        return new Uint8ClampedArray(width * height * 3);
     }
 
     /**

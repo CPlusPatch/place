@@ -1,6 +1,6 @@
 import type { BunFile } from "bun";
 import chalk from "chalk";
-import type { Canvas } from "./canvas";
+import { Canvas } from "./canvas";
 import type { Config } from "./config";
 import { logger } from "./logging";
 
@@ -19,8 +19,21 @@ export class StorageManager {
     public async readFromDisk(): Promise<Uint8ClampedArray> {
         logger.debug`Reading map from disk`;
 
-        const data = await this.file.arrayBuffer();
-        return new Uint8ClampedArray(data);
+        try {
+            const data = await this.file.arrayBuffer();
+            return new Uint8ClampedArray(data);
+        } catch (e) {
+            if ((e as Error).name === "ENOENT") {
+                logger.info`No map file found, creating new map`;
+
+                return Canvas.createEmptyCanvas(
+                    this.config.config.canvas.size.width,
+                    this.config.config.canvas.size.height,
+                );
+            }
+        }
+
+        throw new Error("Failed to read map from disk");
     }
 
     public async writeToDisk(data: Uint8ClampedArray): Promise<void> {
